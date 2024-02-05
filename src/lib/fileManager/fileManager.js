@@ -63,8 +63,8 @@ fileManager.addCommand(".exit", () => {
   fileManager.exit();
 });
 
-fileManager.addCommand("cat", (source) => {
-  fs.read(source);
+fileManager.addCommand("cat", async (source) => {
+  await fs.read(source);
 });
 
 fileManager.addCommand("add", (source) => {
@@ -99,8 +99,8 @@ fileManager.addCommand("cd", (path) => {
   nm.cd(path);
 });
 
-fileManager.addCommand("hash", (source) => {
-  hash.encode(source);
+fileManager.addCommand("hash", async (source) => {
+  await hash.encode(source);
 });
 
 fileManager.addCommand("compress", async (source, destination) => {
