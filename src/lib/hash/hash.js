@@ -1,17 +1,20 @@
 import { createHash } from "crypto";
 import { createReadStream } from "fs";
+import { pipeline } from "stream/promises";
 
 class Hash {
   constructor() {}
-  encode(source) {
+  async encode(source) {
     try {
       const hash = createHash("sha256");
       const readStream = createReadStream(source);
 
-      readStream.pipe(hash).on("finish", () => {
-        console.log(hash.digest("hex"));
+      await pipeline(readStream, hash.setEncoding("hex"), async (source) => {
+        for await (const chunk of source) {
+          console.log("%s", chunk);
+        }
       });
-    } catch (error) {
+    } catch {
       console.error("Operation failed");
     }
   }
