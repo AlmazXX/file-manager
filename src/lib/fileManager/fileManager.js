@@ -63,32 +63,52 @@ fileManager.addCommand(".exit", () => {
   fileManager.exit();
 });
 
-fileManager.addCommand("cat", fs.read);
+fileManager.addCommand("cat", (source) => {
+  fs.read(source);
+});
 
-fileManager.addCommand("add", fs.create);
+fileManager.addCommand("add", (source) => {
+  fs.create(source);
+});
 
-fileManager.addCommand("rn", fs.rename);
+fileManager.addCommand("rn", (source, destination) => {
+  fs.rename(source, destination);
+});
 
-fileManager.addCommand("cp", fs.copy);
+fileManager.addCommand("cp", async (source, destination) => {
+  await fs.copy(source, destination);
+});
 
 fileManager.addCommand("mv", async (source, destination) => {
   await fs.move(source, destination);
 });
 
-fileManager.addCommand("rm", fs.remove);
+fileManager.addCommand("rm", (source) => {
+  fs.remove(source);
+});
 
-fileManager.addCommand("os", opearatingSystem.handleCommand);
+fileManager.addCommand("os", (flag) => {
+  opearatingSystem.handleCommand(flag);
+});
 
 fileManager.addCommand("up", nm.up);
 
 fileManager.addCommand("ls", nm.ls);
 
-fileManager.addCommand("cd", nm.cd);
+fileManager.addCommand("cd", (path) => {
+  nm.cd(path);
+});
 
-fileManager.addCommand("hash", hash.encode);
+fileManager.addCommand("hash", (source) => {
+  hash.encode(source);
+});
 
-fileManager.addCommand("compress", zip.compress);
+fileManager.addCommand("compress", async (source, destination) => {
+  await zip.compress(source, destination);
+});
 
-fileManager.addCommand("decompress", zip.decompress);
+fileManager.addCommand("decompress", async (source, destination) => {
+  await zip.decompress(source, destination);
+});
 
 export { fileManager };
