@@ -8,7 +8,9 @@ opearatingSystem.addCommand("--EOL", () => {
 });
 
 opearatingSystem.addCommand("--cpus", () => {
-  const cpuData = os.cpus().map(({ model, speed }) => ({ model, speed }));
+  const cpuData = os
+    .cpus()
+    .map(({ model, speed }) => ({ model, speed: speed / 1000 }));
   console.log("Overall amount of CPUS is %d", cpuData.length);
   console.table(cpuData);
 });
