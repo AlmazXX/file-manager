@@ -5,27 +5,31 @@ import { pipeline } from "stream/promises";
 class FileSystem {
   constructor() {}
 
-  async create(source) {
-    await fs.promises.writeFile(source, "", { flag: "wx" });
-  }
-
-  read(source) {
-    return new Promise((resolve, reject) => {
-      fs.createReadStream(source)
-        .on("data", (chunk) => console.log("%s", chunk))
-        .on("end", resolve)
-        .on("error", () => {
-          reject("Operation faild");
-        });
+  create(source) {
+    fs.writeFile(source, "", { flag: "wx" }, (err) => {
+      if (err) {
+        console.error("Operation failed");
+      }
     });
   }
 
-  async remove(source) {
-    try {
-      await fs.promises.rm(source);
-    } catch (error) {
-      console.error("Operation faild");
-    }
+  read(source) {
+    fs.createReadStream(source)
+      .on("error", () => {
+        console.error("Operation failed");
+      })
+      .pipe(process.stdout)
+      .on("error", () => {
+        console.error("Operation failed");
+      });
+  }
+
+  remove(source) {
+    fs.rm(source, {}, (err) => {
+      if (err) {
+        console.error("Operation failed");
+      }
+    });
   }
 
   async copy(source, destination) {
@@ -41,18 +45,18 @@ class FileSystem {
     }
   }
 
-  async rename(source, destination) {
-    try {
-      await fs.promises.rename(source, destination);
-    } catch (error) {
-      console.error("Operation faild");
-    }
+  rename(source, destination) {
+    fs.rename(source, destination, (err) => {
+      if (err) {
+        console.error("Operation failed");
+      }
+    });
   }
 
   async move(source, destination) {
     try {
       await this.copy(source, destination);
-      await this.remove(source);
+      this.remove(source);
     } catch (error) {
       console.error(error);
     }
