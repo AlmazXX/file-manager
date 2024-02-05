@@ -3,7 +3,7 @@ import { createReadStream } from "fs";
 
 class Hash {
   constructor() {}
-  async encode(source) {
+  encode(source) {
     try {
       const hash = createHash("sha256");
       const readStream = createReadStream(source);
