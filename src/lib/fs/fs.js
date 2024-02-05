@@ -1,5 +1,5 @@
 import fs from "fs";
-import { join, basename } from "path";
+import { basename, join } from "path";
 import { pipeline } from "stream/promises";
 
 class FileSystem {
@@ -13,15 +13,16 @@ class FileSystem {
     });
   }
 
-  read(source) {
-    fs.createReadStream(source)
-      .on("error", () => {
-        console.error("Operation failed");
-      })
-      .pipe(process.stdout)
-      .on("error", () => {
-        console.error("Operation failed");
+  async read(source) {
+    try {
+      await pipeline(fs.createReadStream(source), async (source) => {
+        for await (const chunk of source) {
+          console.log("%s", chunk);
+        }
       });
+    } catch {
+      console.error("Operation failed");
+    }
   }
 
   remove(source) {
